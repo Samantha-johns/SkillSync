@@ -67,12 +67,18 @@ fun ProfileScreen(navController: NavController) {
         }
 
         Spacer(modifier = Modifier.height(24.dp))
-
         Button(onClick = {
-            // Navigate to edit screen (to build later)
-            // navController.navigate("editProfile")
+            navController.navigate("edit_profile")
         }) {
             Text("Edit Profile")
         }
+
+
+//        Button(onClick = {
+//            // Navigate to edit screen (to build later)
+//            // navController.navigate("editProfile")
+//        }) {
+//            Text("Edit Profile")
+//        }
     }
 }

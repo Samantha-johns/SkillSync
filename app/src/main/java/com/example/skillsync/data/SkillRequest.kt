@@ -3,6 +3,7 @@ package com.example.skillsync.data
 data class SkillRequest(
     val id: String = "",
     val title: String = "",
+
     val description: String = "",
     val category: String = "",
     val authorId: String = "",

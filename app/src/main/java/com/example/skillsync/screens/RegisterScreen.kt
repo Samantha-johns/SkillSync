@@ -109,7 +109,8 @@ fun RegisterScreen(
 
             Button(
                 onClick = {
-                    if (password == confirmPassword && email.isNotBlank() && password.length >= 6) {
+                    if (password == confirmPassword && email.isNotBlank()
+                        && password.length >= 6) {
                         auth.createUserWithEmailAndPassword(email, password)
                             .addOnCompleteListener { task ->
                                 if (task.isSuccessful) {

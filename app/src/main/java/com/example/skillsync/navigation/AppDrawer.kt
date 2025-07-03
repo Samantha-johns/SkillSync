@@ -5,17 +5,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ExitToApp
-import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector // <-- ADD THIS IMPORT
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+// No longer need this if defined below: import com.example.skillsync.drawersections.DrawerItem
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -69,32 +70,26 @@ fun AppDrawer(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 🧭 Navigation Items
-        DrawerItem(
+        // 🧭 Drawer Items
+        DrawerItem( // This will now resolve
             icon = Icons.Default.Home,
             label = "Dashboard",
             onClick = { onNavigate("dashboard") }
         )
 
-        DrawerItem(
-            icon = Icons.Default.Add,
-            label = "New Request",
-            onClick = { onNavigate("post_request") }
-        )
-
-        DrawerItem(
-            icon = Icons.AutoMirrored.Filled.List,
+        DrawerItem( // This will now resolve
+            icon = Icons.Default.List,
             label = "My Activity",
-            onClick = { onNavigate("my_activity") }
+            onClick = { onNavigate("browse_requests") }
         )
 
-        DrawerItem(
+        DrawerItem( // This will now resolve
             icon = Icons.Default.Info,
             label = "App Info",
             onClick = { onNavigate("app_info") }
         )
 
-        DrawerItem(
+        DrawerItem( // This will now resolve
             icon = Icons.Default.Star,
             label = "Upgrade",
             onClick = { onNavigate("upgrade") }
@@ -103,8 +98,8 @@ fun AppDrawer(
         Spacer(modifier = Modifier.weight(1f))
 
         // 🔴 Logout
-        HorizontalDivider()
-        DrawerItem(
+        HorizontalDivider() // Using HorizontalDivider for clarity
+        DrawerItem( // This will now resolve
             icon = Icons.AutoMirrored.Filled.ExitToApp,
             label = "Logout",
             onClick = onLogout
@@ -112,30 +107,182 @@ fun AppDrawer(
     }
 }
 
+// 👇 ADD THIS COMPOSABLE FUNCTION DEFINITION HERE 👇
 @Composable
 fun DrawerItem(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     label: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier // Optional: Allow passing modifiers
 ) {
     TextButton(
         onClick = onClick,
-        modifier = Modifier
+        modifier = modifier // Apply the modifier here
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .padding(horizontal = 16.dp, vertical = 8.dp) // Reduced vertical padding slightly
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = label,
-            modifier = Modifier.size(24.dp)
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyLarge
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth() // Ensure row takes full width for alignment
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = label, // Use label as content description
+                modifier = Modifier.size(24.dp)
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }
     }
 }
+
+
+
+
+
+
+
+//package com.example.skillsync.navigation
+//
+//import androidx.compose.foundation.Image
+//import androidx.compose.foundation.background
+//import androidx.compose.foundation.layout.*
+//import androidx.compose.foundation.shape.CircleShape
+//import androidx.compose.material.icons.Icons
+//import androidx.compose.material.icons.automirrored.filled.ExitToApp
+//import androidx.compose.material.icons.automirrored.filled.List
+//import androidx.compose.material.icons.filled.*
+//import androidx.compose.material3.*
+//import androidx.compose.runtime.Composable
+//import androidx.compose.ui.Alignment
+//import androidx.compose.ui.Modifier
+//import androidx.compose.ui.draw.clip
+//import androidx.compose.ui.graphics.Color
+//import androidx.compose.ui.unit.dp
+//import coil.compose.rememberAsyncImagePainter
+//import com.google.firebase.auth.FirebaseAuth
+//
+//@Composable
+//fun AppDrawer(
+//    onNavigate: (String) -> Unit,
+//    onLogout: () -> Unit
+//) {
+//    val user = FirebaseAuth.getInstance().currentUser
+//    val displayName = user?.displayName ?: "SkillSync User"
+//    val email = user?.email ?: "No email"
+//    val profilePic = user?.photoUrl?.toString()
+//
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .background(MaterialTheme.colorScheme.background)
+//    ) {
+//        // 🔵 Header
+//        Column(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .background(MaterialTheme.colorScheme.primary)
+//                .padding(24.dp),
+//            horizontalAlignment = Alignment.CenterHorizontally
+//        ) {
+//            if (profilePic != null) {
+//                Image(
+//                    painter = rememberAsyncImagePainter(profilePic),
+//                    contentDescription = "Profile Picture",
+//                    modifier = Modifier
+//                        .size(80.dp)
+//                        .clip(CircleShape)
+//                )
+//            } else {
+//                Icon(
+//                    imageVector = Icons.Default.Person,
+//                    contentDescription = "Default Avatar",
+//                    tint = Color.White,
+//                    modifier = Modifier
+//                        .size(80.dp)
+//                        .clip(CircleShape)
+//                        .background(Color.Gray)
+//                        .padding(12.dp)
+//                )
+//            }
+//
+//            Spacer(modifier = Modifier.height(12.dp))
+//            Text(displayName, color = Color.White, style = MaterialTheme.typography.titleMedium)
+//            Text(email, color = Color.White.copy(alpha = 0.7f), style = MaterialTheme.typography.bodySmall)
+//        }
+//
+//        Spacer(modifier = Modifier.height(16.dp))
+//
+//        // 🧭 Navigation Items
+//        DrawerItem(
+//            icon = Icons.Default.Home,
+//            label = "Dashboard",
+//            onClick = { onNavigate("dashboard") }
+//        )
+//
+//        DrawerItem(
+//            icon = Icons.Default.Add,
+//            label = "New Request",
+//            onClick = { onNavigate("post_request") }
+//        )
+//
+//        DrawerItem(
+//            icon = Icons.AutoMirrored.Filled.List,
+//            label = "My Activity",
+//            onClick = { onNavigate("my_activity") }
+//        )
+//
+//        DrawerItem(
+//            icon = Icons.Default.Info,
+//            label = "App Info",
+//            onClick = { onNavigate("app_info") }
+//        )
+//
+//        DrawerItem(
+//            icon = Icons.Default.Star,
+//            label = "Upgrade",
+//            onClick = { onNavigate("upgrade") }
+//        )
+//
+//        Spacer(modifier = Modifier.weight(1f))
+//
+//        // 🔴 Logout
+//        HorizontalDivider()
+//        DrawerItem(
+//            icon = Icons.AutoMirrored.Filled.ExitToApp,
+//            label = "Logout",
+//            onClick = onLogout
+//        )
+//    }
+//}
+//
+//@Composable
+//fun DrawerItem(
+//    icon: androidx.compose.ui.graphics.vector.ImageVector,
+//    label: String,
+//    onClick: () -> Unit
+//) {
+//    TextButton(
+//        onClick = onClick,
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(horizontal = 16.dp, vertical = 8.dp)
+//    ) {
+//        Icon(
+//            imageVector = icon,
+//            contentDescription = label,
+//            modifier = Modifier.size(24.dp)
+//        )
+//        Spacer(modifier = Modifier.width(16.dp))
+//        Text(
+//            text = label,
+//            style = MaterialTheme.typography.bodyLarge
+//        )
+//    }
+//}
 
 
 //import androidx.compose.foundation.Image
